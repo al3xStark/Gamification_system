@@ -1,0 +1,200 @@
+.game-page {
+  .search-game {
+    height: 100vh;
+    background: url(/public/images/background.jpg);
+    background-size: cover !important;
+    background-position: 50% !important;
+    position: relative;
+    display: flex;
+    padding-top: 200px;
+    justify-content: center;
+    margin-top: -56px;
+    box-shadow: inset 100px 0 250px #000, inset -100px 0 250px #000, inset 0px 50px 250px #000, inset 0px -50px 250px #000;
+
+    .search-line {
+      display: block;
+      width: 600px;
+      margin: auto;
+      padding: 15px 30px;
+      box-shadow: 0 0 10px white, 0 0 0 black;
+      border: 2px solid #222222;
+      font-size: 1.5em;
+    }
+
+    .find-list {
+      background: #000000eb;
+      position: absolute;
+      margin: auto;
+      left: 50%;
+      margin-left: -300px;
+      width: 600px;
+      padding: 15px 30px;
+      box-shadow: 0 0 10px white, 0 0 0 black;
+      border: 2px solid #222222;
+      color: white;
+      font-size: 1em;
+      margin-top: -1px;
+      border-top: 0;
+      line-height: 1em;
+
+      a {
+        color: #8d8d8d;
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+}
+
+.game {
+  .game-panel {
+    height: 100vh;
+    width: 100%;
+    margin-top: -56px;
+    padding-top: 56px;
+    position: relative;
+    .game-background {
+      height: 100%;
+      width: 100%;
+      background-size: cover !important;
+      background-position: 50% !important;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-box-shadow: inset 100px 0 250px #000,
+      inset -100px 0 250px #000,
+      inset 0px 50px 250px #000,
+      inset 0px -50px 250px #000;
+
+      -moz-box-shadow: inset 100px 0 250px #000,
+      inset -100px 0 250px #000,
+      inset 0px 50px 250px #000,
+      inset 0px -50px 250px #000;
+
+      box-shadow: inset 100px 0 250px #000,
+      inset -100px 0 250px #000,
+      inset 0px 50px 250px #000,
+      inset 0px -50px 250px #000;
+
+      .title {
+        font-size: 5em;
+        color: white;
+        position: absolute;
+        top: 50px;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        text-shadow: 2px 2px 4px black;
+        padding: 0 200px;
+        text-align: center;
+        line-height: 1em;
+      }
+    }
+
+  }
+
+  .screanshot {
+    width: 300px;
+    height: 180px;
+    background-size: cover !important;
+    background-position: 50% !important;
+  }
+
+
+  .rating-area {
+    overflow: hidden;
+    margin: 0 auto;
+    position: absolute;
+    bottom: 25px;
+    padding: 0;
+
+    &:not(:checked) {
+      & > input {
+        display: none;
+      }
+
+      & > label {
+        float: right;
+        width: 60px;
+        padding: 0;
+        cursor: pointer;
+        font-size: 60px;
+        line-height: 60px;
+        color: lightgrey;
+        text-shadow: 1px 1px #bbb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:before {
+          content: '★';
+          text-shadow: 0px 0px 5px black, 0px 0px 5px black, 0px 0px 10px black;
+        }
+
+        &:hover,
+        &:hover ~ label {
+          color: gold;
+        }
+      }
+    }
+
+    & > input.current,
+    & > input:checked {
+      & ~ label {
+        color: gold;
+        text-shadow: 1px 1px #c60;
+      }
+
+      & + label:hover,
+      & + label:hover ~ label,
+      & ~ label:hover,
+      & ~ label:hover ~ label,
+      & ~ label {
+        color: gold;
+        text-shadow: 1px 1px goldenrod;
+      }
+    }
+  }
+
+
+  .rate-area > label:active {
+    position: relative;
+  }
+
+
+  .rating-result {
+    width: 265px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 20px;
+    padding: 20px;
+    background: black;
+    border: 4px solid #fff;
+    box-shadow: 0px 0px 4px #ffd700;
+
+    span {
+      padding: 0;
+      font-size: 32px;
+      margin: 0 3px;
+      line-height: 1;
+      color: lightgrey;
+      text-shadow: 1px 1px #bbb;
+
+      &:before {
+        content: '★';
+      }
+
+      &.active {
+        color: gold;
+        text-shadow: 1px 1px #c60;
+      }
+    }
+  }
+}

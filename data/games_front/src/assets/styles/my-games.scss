@@ -1,0 +1,42 @@
+.my-games-page {
+  height: 100vh;
+  background: url(/public/images/background.jpg);
+  background-size: cover !important;
+  background-position: 50% !important;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: -56px;
+  padding-top: 56px;
+  box-shadow: inset 100px 0 250px #000, inset -100px 0 250px #000, inset 0px 50px 250px #000, inset 0px -50px 250px #000;
+  color: white;
+
+  .title {
+    color: white;
+    display: flex;
+    justify-content: center;
+    padding: 30px 0 0;
+    font-size: 3em;
+    text-shadow: 0 0 4px black, 0 0 4px black;
+  }
+
+  .games-list {
+    width: 600px;
+    max-width: 100%;
+    margin: auto;
+    border: 1px solid;
+    background: #000000d4;
+    padding: 30px;
+    margin-top: 30px;
+    max-height: 70vh;
+    overflow: auto;
+  }
+
+  a {
+    color: #ffffff;
+
+    &:hover {
+      color: #b8a3ff;
+    }
+  }
+}

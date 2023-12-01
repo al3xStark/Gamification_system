@@ -1,0 +1,178 @@
+version: '3.2'
+
+networks:
+  stark_network:
+    driver: bridge
+
+services:
+
+  ##################################################
+  ######                NGINX                #######
+  ##################################################
+
+  stark_nginx:
+    build: ./images/nginx
+    container_name: stark_nginx
+    ports:
+      - 80:80
+      - 8000:80
+    command: dc_command
+    expose:
+      - 8001
+    volumes:
+      - ./data:/data
+      - ./logs/nginx:/var/log/nginx
+      - ./resources/nginx/dc_command.sh:/usr/bin/dc_command
+      - ./resources/nginx/sites-available:/etc/nginx/sites-available
+    depends_on:
+      - stark_redis
+      - stark_mysql
+      - stark_games_back
+      - stark_games_front
+      - stark_achievements_back
+      - stark_achievements_front
+
+    networks:
+      stark_network:
+        aliases:
+          - games.local
+          - achievements.local
+
+  ##################################################
+  ######                REDIS                #######
+  ##################################################
+
+  stark_redis:
+    image: redis:alpine
+    container_name: stark_redis
+    ports:
+      - "16379:6379"
+    command: >
+      --requirepass Qazxsw123
+    networks:
+      - stark_network
+
+  ##################################################
+  ######                MYSQL                #######
+  ##################################################
+
+  stark_mysql:
+    image: mysql/mysql-server:8.0
+    container_name: stark_mysql
+    command: mysqld --sql_mode="" --default-authentication-plugin=mysql_native_password
+    ports:
+      - "13306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./resources/dumps:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: Qazxsw123
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_USER: user
+      MYSQL_PASSWORD: Qazxsw123
+    cap_add:
+      - SYS_NICE
+    restart: always
+    networks:
+      - stark_network
+
+  ##################################################
+  ######              GAMES BACK             #######
+  ##################################################
+
+  stark_games_back:
+    build:
+      context: ./data/games_back
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    container_name: stark_games_back
+    ports:
+      - '8002:80'
+    depends_on:
+      - stark_mysql
+      - stark_redis
+    environment:
+      WEB_ALIAS_DOMAIN: api.games.local
+    networks:
+      stark_network:
+        aliases:
+          - api.games.local
+          - api.games.local:8002
+
+  ##################################################
+  ######             GAMES FRONT             #######
+  ##################################################
+
+  stark_games_front:
+    build: ./images/front
+    container_name: stark_games_front
+    expose:
+      - 3000
+    command: dc_command
+    volumes:
+      - ./data/games_front:/data/games_front
+      - ./resources:/resources
+      - ./resources/games_front/dc_command.sh:/usr/bin/dc_command
+    restart: always
+    working_dir: /data/games_front
+    networks:
+      - stark_network
+
+  ##################################################
+  ######          ACHIEVEMENTS BACK          #######
+  ##################################################
+
+  stark_achievements_back:
+    build:
+      context: ./data/achievements_back
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    container_name: stark_achievements_back
+    ports:
+      - '8001:80'
+    depends_on:
+      - stark_mysql
+      - stark_redis
+    environment:
+      WEB_ALIAS_DOMAIN: api.achievements.local
+    networks:
+      stark_network:
+        aliases:
+          - api.achievements.local
+          - api.achievements.local:8001
+
+  stark_achievements_events:
+    build: ./images/php8
+    expose:
+      - 9000
+    links:
+      - stark_mysql
+      - stark_redis
+    command: php artisan queue:work --queue=events
+    volumes:
+      - ./data/achievements_back:/data/achievements_back
+      - ./resources:/resources
+    restart: always
+    working_dir: /data/achievements_back
+    networks:
+      - stark_network
+
+  ##################################################
+  ######         ACHIEVEMENTS FRONT          #######
+  ##################################################
+
+  stark_achievements_front:
+    build: ./images/front
+    container_name: stark_achievements_front
+    expose:
+      - 3000
+    command: dc_command
+    volumes:
+      - ./data/achievements_front:/data/achievements_front
+      - ./resources:/resources
+      - ./resources/achievements_front/dc_command.sh:/usr/bin/dc_command
+    restart: always
+    working_dir: /data/achievements_front
+    networks:
+      - stark_network
+

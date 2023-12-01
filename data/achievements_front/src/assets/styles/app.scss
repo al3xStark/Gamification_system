@@ -1,0 +1,39 @@
+#content {
+  &>div:first-child {
+    position: relative;
+    height: 100%;
+  }
+
+  .admin-menu {
+    background: #626262;
+    padding: 0;
+  }
+
+  .admin-content {
+    background: azure;
+  }
+}
+
+#app .navbar {
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: #080808;
+}
+
+.body {
+  padding-top: 56px;
+}
+
+#sidebar {
+  a {
+    color: #262626;
+    background: #dbdbdb;
+
+    &:hover,
+    &.router-link-active {
+      background: #bfbfbf;
+    }
+  }
+}

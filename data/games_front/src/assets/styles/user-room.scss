@@ -1,0 +1,13 @@
+.user-room-iframe {
+  height: 100vh;
+  margin-top: -56px;
+  padding-top: 56px;
+
+  iframe {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+}

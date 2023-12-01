@@ -1,0 +1,3 @@
+reset password
+
+Code {{ $code }}

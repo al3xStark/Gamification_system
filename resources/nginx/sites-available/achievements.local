@@ -1,0 +1,38 @@
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+    }
+
+upstream stark_achievements_front_upstream {
+    server stark_achievements_front:3000;
+}
+
+server {
+	listen 80;
+	server_name achievements.local;
+	index index.php index.html;
+	error_log  /var/log/nginx/stark_achievements.error.log;
+	access_log /var/log/nginx/stark_achievements.access.log;
+	root /data/achievements_front;
+
+    location / {
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_pass http://stark_achievements_front_upstream/;
+    }
+
+	location /api {
+		try_files $uri $uri/ /index.php?$args; # make index.php handle requests for /
+    }
+
+    location ~ ^/.+\.php(/|$) {
+	    root /data/back/public;
+		include fastcgi_params;
+		fastcgi_pass stark_achievements_back:9000;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}

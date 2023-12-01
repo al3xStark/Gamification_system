@@ -1,0 +1,35 @@
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+    }
+
+server {
+	listen 80;
+	listen 8001;
+	server_name api.achievements.local;
+	index index.php index.html;
+	error_log  /var/log/nginx/achievements_back.error.log;
+	access_log /var/log/nginx/achievements_back.access.log;
+	root /data/achievements_back/public;
+
+    location ~ ^/storage {
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
+        add_header 'Access-Control-Allow-Headers' 'Origin, X-Requested-With, Content-Type, Accept';
+        add_header 'Access-Control-Allow-Credentials' 'true';
+        add_header 'Access-Control-Max-Age' 86400;
+        if ($request_method = 'OPTIONS') {
+            return 204;
+        }
+    }
+
+	location / {
+		try_files $uri $uri/ /index.php?$args; # make index.php handle requests for /
+    }
+
+    location ~ ^/.+\.php(/|$) {
+		include fastcgi_params;
+		fastcgi_pass stark_achievements_back:9000;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}

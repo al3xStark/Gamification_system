@@ -1,0 +1,46 @@
+.comments {
+  background: #0000008f;
+  border-radius: 4px;
+  box-shadow: 0 0 4px #000000;
+  border: 1px solid white;
+  padding: 15px;
+  width: 400px;
+  height: 60vh;
+  position: fixed;
+  top: 30vh;
+  right: 50px;
+
+  &-list {
+    position: relative;
+    height: 75%;
+    color: #ffffff;
+    margin-bottom: 5%;
+    overflow: auto;
+
+    .username {
+      font-weight: 600;
+    }
+
+    .comment-text {
+      padding-left: 15px;
+    }
+  }
+
+  &-input {
+    position: relative;
+    height: 20%;
+    display: flex;
+    flex-wrap: wrap;
+
+    textarea {
+      width: 100%;
+      background: none;
+      border: 1px solid white;
+      border-radius: 4px;
+      resize: none;
+      color: white;
+      padding: 5px 10px;
+      margin-bottom: 15px;
+    }
+  }
+}
